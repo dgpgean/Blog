@@ -1,0 +1,45 @@
+<%- include('../../partials/header')%>
+<%-include('../../partials/navBar.ejs')%>
+<div class="container">
+    <hr>
+    <h2>Categorias</h2>
+    <a class="btn btn-success" href="/admin/categories/new">Criar nova categoria</a>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Slug</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            <%categories.forEach(category=>{%>
+                <tr>
+                    <th><%=category.id%></th>
+                    <th><%=category.title%></th>
+                    <th><%=category.slug%></th>
+                    <th>
+                        <a class="btn btn-warning" href="/admin/categories/edit/<%=category.id%>">Editar</a>
+
+                        <form action="/categories/delete" method="POST" style="display:inline;" onsubmit="confirmaDelete(event,this)">
+                            <input type="hidden" name="id" value="<%=category.id%>">
+                            <button class="btn btn-danger">Deletar</button>
+                        </form>
+                    </th>
+                </tr>
+            <%})%>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../../partials/footer')%>
+<script>
+    function confirmaDelete(event,form){      
+        const chave = confirm('Deletar Categoria?')
+        chave? form.submit():event.preventDefault()
+    }
+
+</script>
