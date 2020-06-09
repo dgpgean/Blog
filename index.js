@@ -1,18 +1,30 @@
 const express = require('express')
 const app = express()
-const conection = require('./DataBase/DataBase')
+const conection = require('./DataBase/DataBase');
+const session = require('express-session');
 
 const categoriesController = require('./Categories/CategoriesController')
 const articleController = require('./Articles/ArticleController')
 
 const Article = require('./Articles/Article')
 const Category = require('./Categories/Categories')
+const users = require('./user/user')
+
+const usersController =require('./user/userController');
 
 
 // configuração do ejs
 app.set('view engine','ejs')
 // pasta Public
 app.use(express.static('Public'))
+
+
+//session
+app.use(session({
+    secret:"seilameuqualquercoisalaeatoria",
+    cookie:{maxAge:30000}
+}))
+
 
 
 // pra pegar dados dos fomularios
@@ -28,6 +40,10 @@ conection.authenticate().then(()=>{
 
 app.use('/',categoriesController)
 app.use('/',articleController)
+app.use('/',usersController)
+
+
+
 
 //rotas
 app.get('/',(req,res)=>{

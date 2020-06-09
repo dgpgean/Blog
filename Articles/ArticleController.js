@@ -3,9 +3,9 @@ const router = express.Router()
 const category = require('../Categories/Categories')
 const article = require('./Article')
 const slugfy = require('slugify')
+const adminAuth = require('../middlewares/adminAuth')
 
-
-router.get('/admin/articles',(req,res)=>{
+router.get('/admin/articles',adminAuth,(req,res)=>{
 
     article.findAll({
         include:[{model:category}]
@@ -16,7 +16,7 @@ router.get('/admin/articles',(req,res)=>{
     })    
 })
 
-router.get('/admin/articles/new',(req,res)=>{
+router.get('/admin/articles/new',adminAuth,(req,res)=>{
 
     category.findAll().then(categories=>{
         res.render('admin/articles/new',{
@@ -25,7 +25,7 @@ router.get('/admin/articles/new',(req,res)=>{
     })
 })
 
-router.post('/articles/save',(req,res)=>{
+router.post('/articles/save',adminAuth,(req,res)=>{
     const title = req.body.title
     const body = req.body.body
     var category = req.body.category
@@ -40,7 +40,7 @@ router.post('/articles/save',(req,res)=>{
     })
 })
 
-router.get('/admin/articles/edit/:id',(req,res)=>{
+router.get('/admin/articles/edit/:id',adminAuth,(req,res)=>{
     const id = req.params.id
     isNaN(id)?res.redirect('/admin/articles'):
     article.findByPk(id).then(article =>{
@@ -59,7 +59,7 @@ router.get('/admin/articles/edit/:id',(req,res)=>{
     
 })
 
-router.post('/articles/update',(req,res)=>{
+router.post('/articles/update',adminAuth,(req,res)=>{
     const id = req.body.id
     const title = req.body.title
     const body = req.body.body
@@ -72,7 +72,7 @@ router.post('/articles/update',(req,res)=>{
 
 
 
-router.post('/articles/delete',(req,res)=>{
+router.post('/articles/delete',adminAuth,(req,res)=>{
     const id = req.body.id
     if(id!=undefined){
         if(!isNaN(id)){
